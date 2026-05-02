@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:400px;margin:0 auto;">
+  <h2>Admin Dashboard</h2>
+  <p>Enter your admin password to access the data dashboard.</p>
+  <form method="GET" action="/admin">
+    <label>Password</label>
+    <input type="password" name="pw"
+      style="width:100%;padding:12px;border:2px solid var(--border);
+             border-radius:8px;font-size:16px;margin-bottom:16px;"
+      placeholder="Enter admin password">
+    <button type="submit" class="btn btn-full">Login →</button>
+  </form>
+</div>
+{% endblock %}

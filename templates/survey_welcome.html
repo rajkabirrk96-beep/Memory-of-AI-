@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align:center;padding:40px 32px;">
+  <div style="font-size:56px;margin-bottom:16px;">📊</div>
+  <h1>Welcome to this Study</h1>
+  <p style="font-size:17px;max-width:560px;margin:16px auto;">
+    This study is interested in how people make investment decisions
+    with the assistance of artificial intelligence (AI).
+  </p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
+              margin:24px 0;text-align:left;">
+    <div style="background:var(--light);border-radius:10px;padding:20px;
+                border:1px solid var(--border);">
+      <div style="font-size:28px;margin-bottom:8px;">⏱</div>
+      <div style="font-weight:bold;color:var(--navy);margin-bottom:4px;">Duration</div>
+      <div style="color:var(--muted);font-size:14px;">15 to 20 minutes</div>
+    </div>
+    <div style="background:var(--light);border-radius:10px;padding:20px;
+                border:1px solid var(--border);">
+      <div style="font-size:28px;margin-bottom:8px;">🔄</div>
+      <div style="font-weight:bold;color:var(--navy);margin-bottom:4px;">Rounds</div>
+      <div style="color:var(--muted);font-size:14px;">15 investment rounds</div>
+    </div>
+    <div style="background:var(--light);border-radius:10px;padding:20px;
+                border:1px solid var(--border);">
+      <div style="font-size:28px;margin-bottom:8px;">💰</div>
+      <div style="font-weight:bold;color:var(--navy);margin-bottom:4px;">Task</div>
+      <div style="color:var(--muted);font-size:14px;">Invest $1,000 per round</div>
+    </div>
+  </div>
+
+  <!-- Instructions, Rules, and Bonus Prize -->
+  <div style="background:#F0FDF4;border:2px solid #16A34A;border-radius:12px;
+              padding:24px;margin:20px 0;text-align:left;">
+    <h3 style="color:#15803D;margin-bottom:12px;">🏆 Instructions, Rules, and Bonus Prize</h3>
+    <p style="color:#166534;margin-bottom:10px;">
+      You will make <strong>15 rounds</strong> of investment decisions. Please read the
+      instructions and make your decisions carefully at each step of your way.
+      Each round will follow a similar process.
+    </p>
+    <p style="color:#166534;margin-bottom:10px;">
+      Imagine you are entitled to investing <strong>$1,000 "seed money"</strong> in each round.
+      Your decisions in each round will influence your <strong>"final return"</strong>
+      (i.e., profit or loss) at the end of the 15 rounds. Your cumulative balance at the
+      end of the 15 rounds minus the $1,000 × 15 = $15,000 seed money will be your
+      final return.
+    </p>
+    <p style="color:#166534;font-weight:bold;margin-bottom:0;">
+      🎧 How to win a bonus prize:<br>
+      <span style="font-weight:normal;">
+        If your final return places you in the top 10% of all participants,
+        congratulations, you will earn a chance to win a new
+        <strong>Apple AirPods 4</strong> through a random drawing.
+      </span>
+    </p>
+  </div>
+
+  <!-- Important Notice -->
+  <div class="warn-box" style="text-align:left;">
+    <div style="font-weight:bold;color:#92400E;margin-bottom:8px;font-size:15px;">
+      ⚠ Important!
+    </div>
+    <p style="color:#92400E;margin:0;font-size:14px;line-height:1.6;">
+      Please <strong>do not use the browser back button</strong> at any point
+      during this study. Use only the <strong>Next</strong> buttons provided.
+      Back navigation is monitored and may result in
+      <strong>disqualification</strong> and forfeiture of
+      <strong>rewards and bonuses</strong>.
+    </p>
+  </div>
+
+  <hr class="divider">
+  <p style="font-size:13px;color:var(--muted);max-width:500px;margin:0 auto 24px;">
+    Your participation is voluntary and your responses are completely anonymous.
+    Data will be used for academic research purposes only.
+  </p>
+  <form method="POST" action="/survey">
+    <input type="hidden" name="action" value="welcome">
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Assisted Investment Study — University of Houston</title>
+<style>
+:root{--navy:#1F3864;--blue:#2E5090;--green:#0F6E56;--amber:#BA7517;
+--light:#EEF2FF;--gray:#F4F6FB;--border:#D1D9F0;--text:#1E293B;
+--muted:#64748B;--red:#A32D2D;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Georgia',serif;background:var(--gray);color:var(--text);min-height:100vh;}
+.header{background:var(--navy);color:white;padding:12px 24px;display:flex;
+  align-items:center;justify-content:space-between;font-size:13px;}
+.header-logo{font-weight:bold;font-size:15px;}
+.container{max-width:820px;margin:0 auto;padding:24px 16px 60px;}
+.card{background:white;border-radius:12px;border:1px solid var(--border);
+  padding:32px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+h1{color:var(--navy);font-size:24px;margin-bottom:8px;}
+h2{color:var(--navy);font-size:20px;margin-bottom:12px;}
+h3{color:var(--blue);font-size:17px;margin-bottom:10px;}
+p{color:var(--muted);line-height:1.7;margin-bottom:12px;}
+label{display:block;font-weight:bold;color:var(--text);margin-bottom:8px;font-size:15px;}
+select,textarea{width:100%;padding:12px 16px;border:2px solid var(--border);
+  border-radius:8px;font-size:15px;font-family:inherit;color:var(--text);
+  background:white;transition:border-color 0.2s;margin-bottom:20px;}
+select:focus,textarea:focus{outline:none;border-color:var(--blue);}
+.btn{display:inline-block;background:var(--blue);color:white;padding:14px 32px;
+  border:none;border-radius:8px;font-size:16px;font-family:inherit;cursor:pointer;
+  text-decoration:none;transition:background 0.2s;font-weight:bold;
+  width:100%;text-align:center;}
+.btn:hover{background:var(--navy);}
+.progress-bar{background:var(--border);border-radius:99px;height:8px;
+  margin-bottom:24px;overflow:hidden;}
+.progress-fill{background:linear-gradient(90deg,var(--blue),var(--green));
+  height:100%;border-radius:99px;transition:width 0.5s;}
+.progress-label{text-align:right;font-size:13px;color:var(--muted);margin-bottom:6px;}
+.divider{border:none;border-top:1px solid var(--border);margin:24px 0;}
+.footer-note{text-align:center;font-size:12px;color:var(--muted);
+  margin-top:32px;opacity:0.7;}
+.info-box{background:#DBEAFE;border:2px solid #3B82F6;border-radius:10px;
+  padding:16px;margin:16px 0;}
+.warn-box{background:#FEF3C7;border:2px solid #F59E0B;border-radius:10px;
+  padding:16px;margin:16px 0;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-logo">🎓 University of Houston</div>
+  <div>AI-Assisted Investment Study</div>
+</div>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+<div class="footer-note">University of Houston · Bauer College of Business</div>
+</body>
+</html>

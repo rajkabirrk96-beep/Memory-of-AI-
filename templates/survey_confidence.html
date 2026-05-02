@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+{% set pct = ((rnd - 1) / total_rounds * 100) | int %}
+<div class="progress-label">Round {{ rnd }} of {{ total_rounds }} — Confidence Rating</div>
+<div class="progress-bar"><div class="progress-fill" style="width:{{ pct }}%"></div></div>
+
+<div class="card">
+  <h2>Round {{ rnd }} — AI Recommendation &amp; Your Decision</h2>
+  <div style="background:#E8EEFF;padding:20px;border-radius:10px;
+              border-left:4px solid var(--blue);margin-bottom:20px;">
+    <div style="font-weight:bold;color:var(--navy);margin-bottom:10px;
+                font-size:13px;text-transform:uppercase;">🤖 AI RECOMMENDATION</div>
+    <p style="color:var(--text);font-style:italic;margin-bottom:0;line-height:1.8;">
+      "{{ ai_text | safe }}"
+    </p>
+  </div>
+  <div style="display:flex;gap:12px;margin-bottom:8px;">
+    <div style="flex:1;background:var(--light);border-radius:10px;padding:16px;
+                text-align:center;border:2px solid var(--blue);">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;
+                  text-transform:uppercase;letter-spacing:0.5px;">{{ sa }}</div>
+      <div style="font-size:32px;font-weight:bold;color:#0F6E56;">${{ alloc_a }}</div>
+    </div>
+    <div style="display:flex;align-items:center;color:var(--muted);
+                font-size:20px;font-weight:bold;">+</div>
+    <div style="flex:1;background:#FAF5FF;border-radius:10px;padding:16px;
+                text-align:center;border:2px solid #6B21A8;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;
+                  text-transform:uppercase;letter-spacing:0.5px;">{{ sb }}</div>
+      <div style="font-size:32px;font-weight:bold;color:#6B21A8;">${{ alloc_b }}</div>
+    </div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--gray);
+              border-radius:8px;color:var(--muted);font-size:13px;">
+    Total: <strong style="color:var(--navy);">$1,000</strong>
+  </div>
+</div>
+
+<form method="POST" action="/survey">
+  <input type="hidden" name="action" value="confidence_{{ rnd }}">
+  <input type="hidden" id="confValue" name="confidence" value="">
+  <div class="card">
+    <p style="font-size:16px;color:var(--text);font-weight:bold;margin-bottom:16px;">
+      How confident are you about your allocation decision in this round?
+    </p>
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-bottom:8px;padding:0 2px;">
+      <span>0</span><span>10</span><span>20</span><span>30</span><span>40</span>
+      <span>50</span><span>60</span><span>70</span><span>80</span><span>90</span>
+      <span>100</span>
+    </div>
+    <div id="sliderTrack"
+      style="position:relative;height:20px;background:#E2E8F0;border-radius:99px;
+             cursor:pointer;user-select:none;-webkit-user-select:none;"
+      onmousedown="startDrag(event)" ontouchstart="startTouch(event)">
+      <div id="sliderFill" style="position:absolute;left:0;top:0;height:100%;
+             width:0%;background:#94A3B8;border-radius:99px;pointer-events:none;"></div>
+      <div id="sliderKnob" style="position:absolute;top:50%;width:26px;height:26px;
+             background:white;border:3px solid #94A3B8;border-radius:50%;
+             transform:translate(-50%,-50%);left:0%;display:none;
+             pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-top:8px;">
+      <span>Not confident at all</span><span>Extremely confident</span>
+    </div>
+    <div id="confPrompt" style="margin-top:20px;padding:20px;background:var(--gray);
+         border-radius:10px;text-align:center;color:var(--muted);font-size:15px;
+         border:2px dashed var(--border);">
+      ☝ Click or drag the bar above to set your confidence level
+    </div>
+    <div id="confDisplay" style="display:none;margin-top:20px;padding:20px;
+         background:var(--gray);border-radius:10px;text-align:center;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px;
+                  text-transform:uppercase;letter-spacing:1px;">Your Confidence Level</div>
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;">
+        <span id="confNum" style="font-size:60px;font-weight:bold;
+                                   line-height:1;color:#64748B;">0</span>
+        <span style="font-size:28px;font-weight:bold;color:#64748B;">%</span>
+      </div>
+      <div style="margin-top:14px;background:var(--border);border-radius:99px;
+                  height:10px;overflow:hidden;">
+        <div id="confBar" style="height:100%;width:0%;background:#94A3B8;
+                                  border-radius:99px;transition:width 0.2s;"></div>
+      </div>
+    </div>
+    <div id="confWarning" style="color:var(--red);font-size:13px;
+                                   margin-top:10px;display:none;">
+      ⚠ Please set your confidence level before continuing.
+    </div>
+  </div>
+  <button type="submit" class="btn" onclick="return checkConf()">Next →</button>
+</form>
+<script>
+var confTouched=false;
+function setConf(pct){
+  pct=Math.max(0,Math.min(100,Math.round(pct)));confTouched=true;
+  document.getElementById('confValue').value=pct;
+  document.getElementById('sliderFill').style.width=pct+'%';
+  var k=document.getElementById('sliderKnob');
+  k.style.display='block';k.style.left=pct+'%';
+  document.getElementById('confPrompt').style.display='none';
+  document.getElementById('confDisplay').style.display='block';
+  document.getElementById('confWarning').style.display='none';
+  document.getElementById('confNum').textContent=pct;
+  document.getElementById('confBar').style.width=pct+'%';
+}
+function getPct(cx){
+  var r=document.getElementById('sliderTrack').getBoundingClientRect();
+  return((cx-r.left)/r.width)*100;
+}
+function startDrag(e){e.preventDefault();setConf(getPct(e.clientX));
+  function mv(e){setConf(getPct(e.clientX));}
+  function up(){document.removeEventListener('mousemove',mv);
+    document.removeEventListener('mouseup',up);}
+  document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);}
+function startTouch(e){e.preventDefault();setConf(getPct(e.touches[0].clientX));
+  var tr=document.getElementById('sliderTrack');
+  function mv(e){setConf(getPct(e.touches[0].clientX));}
+  function en(){tr.removeEventListener('touchmove',mv);
+    tr.removeEventListener('touchend',en);}
+  tr.addEventListener('touchmove',mv,{passive:false});
+  tr.addEventListener('touchend',en);}
+function checkConf(){
+  if(!confTouched){
+    document.getElementById('confWarning').style.display='block';
+    document.getElementById('sliderTrack').scrollIntoView({behavior:'smooth'});
+    return false;
+  }return true;}
+</script>
+{% endblock %}

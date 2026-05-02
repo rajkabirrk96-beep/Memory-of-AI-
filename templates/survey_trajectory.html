@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Round {{ rnd }} is now complete</h2>
+  <p>These charts show the 6-month changes in the value of the stocks.
+    They impact your balance according to your allocation decision.</p>
+
+  <div style="background:var(--gray);border-radius:12px;padding:20px;
+              margin-bottom:20px;border:1px solid var(--border);">
+    <div style="font-weight:bold;color:var(--navy);font-size:16px;margin-bottom:12px;">
+      {{ sa }}
+    </div>
+    <img src="{{ chart_a }}" alt="Stock chart"
+      style="width:100%;border-radius:8px;border:1px solid var(--border);
+             display:block;background:white;">
+  </div>
+
+  <div style="background:var(--gray);border-radius:12px;padding:20px;
+              margin-bottom:24px;border:1px solid var(--border);">
+    <div style="font-weight:bold;color:var(--navy);font-size:16px;margin-bottom:12px;">
+      {{ sb }}
+    </div>
+    <img src="{{ chart_b }}" alt="Stock chart"
+      style="width:100%;border-radius:8px;border:1px solid var(--border);
+             display:block;background:white;">
+  </div>
+
+  <form method="POST" action="/survey">
+    <input type="hidden" name="action" value="trajectory_{{ rnd }}">
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+{% endblock %}

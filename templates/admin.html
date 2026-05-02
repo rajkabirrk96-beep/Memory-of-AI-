@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div style="display:flex;justify-content:space-between;
+              align-items:center;margin-bottom:24px;">
+    <h1 style="margin:0;">Admin Dashboard</h1>
+    <a href="/data?pw=raj_data_conditionA_2024"
+       class="btn btn-green">⬇ Download CSV</a>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;
+              gap:16px;margin-bottom:24px;">
+    <div style="background:var(--light);border-radius:10px;padding:20px;
+                text-align:center;border:2px solid var(--blue);">
+      <div style="font-size:12px;color:var(--muted);text-transform:uppercase;
+                  letter-spacing:0.8px;margin-bottom:8px;">Total Responses</div>
+      <div style="font-size:48px;font-weight:bold;color:var(--navy);">
+        {{ total }}</div>
+    </div>
+    <div style="background:#E6F4F0;border-radius:10px;padding:20px;
+                text-align:center;border:2px solid #0F6E56;">
+      <div style="font-size:12px;color:var(--muted);text-transform:uppercase;
+                  letter-spacing:0.8px;margin-bottom:8px;">Condition A</div>
+      <div style="font-size:48px;font-weight:bold;color:#0F6E56;">
+        {{ cond_a }}</div>
+    </div>
+    <div style="background:#FFF5F5;border-radius:10px;padding:20px;
+                text-align:center;border:2px solid var(--border);">
+      <div style="font-size:12px;color:var(--muted);text-transform:uppercase;
+                  letter-spacing:0.8px;margin-bottom:8px;">Avg OCI</div>
+      <div style="font-size:48px;font-weight:bold;color:var(--amber);">
+        {{ avg_oci }}</div>
+    </div>
+  </div>
+
+  <!-- Recent responses -->
+  <h3>Recent Responses — Last 20</h3>
+  {% if responses %}
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:var(--navy);color:white;">
+          <th style="padding:10px 12px;text-align:left;">ID</th>
+          <th style="padding:10px 12px;">Sector</th>
+          <th style="padding:10px 12px;">Cond</th>
+          <th style="padding:10px 12px;text-align:right;">OCI</th>
+          <th style="padding:10px 12px;text-align:right;">ACI</th>
+          <th style="padding:10px 12px;text-align:right;">Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in responses %}
+        <tr style="border-bottom:1px solid var(--border);
+          {% if loop.index is even %}background:var(--gray);{% endif %}">
+          <td style="padding:10px 12px;font-family:monospace;">
+            {{ r.participant_id }}</td>
+          <td style="padding:10px 12px;text-align:center;font-size:12px;">
+            {{ r.sector }}</td>
+          <td style="padding:10px 12px;text-align:center;font-weight:bold;
+                     color:var(--blue);">{{ r.condition }}</td>
+          <td style="padding:10px 12px;text-align:right;font-weight:bold;
+            color:{% if r.oci|float > 10 %}#A32D2D
+                  {% elif r.oci|float < -10 %}var(--blue)
+                  {% else %}#0F6E56{% endif %};">
+            {{ r.oci }}</td>
+          <td style="padding:10px 12px;text-align:right;
+                     color:var(--amber);">{{ r.mean_aci }}</td>
+          <td style="padding:10px 12px;text-align:right;
+                     color:var(--muted);font-size:11px;">
+            {{ r.completed_at[:16] if r.completed_at else '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color:var(--muted);padding:20px;text-align:center;">
+    No responses yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Sector Selection</h2>
+  <p>First of all, please pick a sector that you are most familiar with.
+    Afterwards, all AI recommendations will be relevant to the selected sector.
+    We do this in order to keep the process streamlined.</p>
+  <hr class="divider">
+  <form method="POST" action="/survey">
+    <input type="hidden" name="action" value="sector">
+    <select name="sector_choice" required>
+      <option value="">— Select one —</option>
+      <option value="Communication Services">Communication Services (e.g., media, telecommunications)</option>
+      <option value="Consumer Discretionary">Consumer Discretionary (e.g., retail, automotive)</option>
+      <option value="Consumer Staples">Consumer Staples (e.g., food, household products)</option>
+      <option value="Energy">Energy (e.g., oil, gas, renewable energy)</option>
+      <option value="Financials">Financials (e.g., banks, insurance)</option>
+      <option value="Health Care">Health Care (e.g., pharmaceuticals, hospitals)</option>
+      <option value="Industrials">Industrials (e.g., aerospace, manufacturing)</option>
+      <option value="Information Technology">Information Technology (e.g., software, hardware)</option>
+      <option value="Materials">Materials (e.g., chemicals, mining)</option>
+      <option value="Real Estate">Real Estate (e.g., property, REITs)</option>
+      <option value="Utilities">Utilities (e.g., electric, gas, water)</option>
+    </select>
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+{% endblock %}

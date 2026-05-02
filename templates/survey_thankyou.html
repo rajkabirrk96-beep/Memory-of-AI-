@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align:center;padding:48px 32px;">
+  <div style="font-size:64px;margin-bottom:16px;">✅</div>
+  <h1>Thank You for Participating!</h1>
+  <p style="font-size:18px;margin:16px 0;">
+    Your responses have been recorded successfully.
+  </p>
+  <p>This study is interested in how artificial intelligence (AI) memory
+    architecture affects investor confidence and decision quality.
+    Your participation contributes to important research at the
+    University of Houston.</p>
+  <hr class="divider">
+  {% if pid %}
+  <div style="margin-top:24px;padding:24px;background:var(--light);
+              border-radius:10px;border:2px solid var(--blue);">
+    <p style="font-weight:bold;color:var(--navy);margin-bottom:16px;">
+      Please click below to confirm your completion on Prolific
+      and receive your rewards and bonuses.
+    </p>
+    <a href="https://app.prolific.com/submissions/complete?cc=COMPLETE"
+       class="btn" style="background:var(--green);display:inline-block;
+                          width:auto;padding:14px 32px;">
+      Complete on Prolific →
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

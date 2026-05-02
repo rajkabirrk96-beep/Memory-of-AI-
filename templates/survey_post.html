@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Final Questions</h2>
+  <p>Almost done. Please answer these final questions. All responses are completely anonymous.</p>
+  <form method="POST" action="/survey" id="postForm">
+    <input type="hidden" name="action" value="post_survey">
+
+    <!-- Q1: Age — custom slider, no default -->
+    <label>1. What is your age?</label>
+    <input type="hidden" id="ageHidden" name="age" value="">
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-bottom:6px;padding:0 2px;">
+      <span>18</span><span>25</span><span>32</span><span>39</span><span>46</span>
+      <span>53</span><span>60</span><span>67</span><span>74</span><span>80</span>
+    </div>
+    <div id="ageTrack"
+      style="position:relative;height:20px;background:#E2E8F0;border-radius:99px;
+             cursor:pointer;user-select:none;-webkit-user-select:none;margin-bottom:6px;">
+      <div id="ageFill" style="position:absolute;left:0;top:0;height:100%;width:0%;
+           background:#94A3B8;border-radius:99px;pointer-events:none;"></div>
+      <div id="ageKnob" style="position:absolute;top:50%;width:26px;height:26px;
+           background:white;border:3px solid #94A3B8;border-radius:50%;
+           transform:translate(-50%,-50%);display:none;pointer-events:none;
+           box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-bottom:8px;">
+      <span>Younger</span><span>Older</span>
+    </div>
+    <div id="agePrompt" style="padding:16px;background:var(--gray);border-radius:10px;
+         text-align:center;color:var(--muted);font-size:14px;
+         border:2px dashed var(--border);margin-bottom:8px;">
+      ☝ Click or drag the bar above to select your age
+    </div>
+    <div id="ageDisplay" style="display:none;padding:16px;background:var(--gray);
+         border-radius:10px;text-align:center;margin-bottom:8px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px;
+                  text-transform:uppercase;letter-spacing:1px;">Your Age</div>
+      <span id="ageVal" style="font-size:52px;font-weight:bold;color:#64748B;
+                                line-height:1;"></span>
+    </div>
+    <div id="ageWarn" style="color:var(--red);font-size:13px;
+                              margin-bottom:16px;display:none;">
+      ⚠ Please select your age before continuing.
+    </div>
+
+    <!-- Q2: Gender -->
+    <label>2. What is your gender?</label>
+    <select name="gender" required>
+      <option value="">— Select —</option>
+      <option>Man</option><option>Woman</option>
+      <option>Non-binary</option>
+      <option>Prefer to self-describe</option>
+      <option>Prefer not to say</option>
+    </select>
+
+    <!-- Q3: Income -->
+    <label>3. What is your total annual household income?</label>
+    <select name="income" required>
+      <option value="">— Select —</option>
+      <option>Less than $25,000</option>
+      <option>$25,000 – $49,999</option>
+      <option>$50,000 – $74,999</option>
+      <option>$75,000 – $99,999</option>
+      <option>$100,000 – $149,999</option>
+      <option>$150,000 – $199,999</option>
+      <option>$200,000 or more</option>
+      <option>Prefer not to say</option>
+    </select>
+
+    <!-- Q4: Education -->
+    <label>4. What is your highest level of education?</label>
+    <select name="education" required>
+      <option value="">— Select —</option>
+      <option>High school diploma or less</option>
+      <option>Some college</option>
+      <option>Bachelor degree</option>
+      <option>Master degree</option>
+      <option>PhD or higher</option>
+      <option>Other</option>
+    </select>
+
+    <!-- Q5: Experience -->
+    <label>5. How many years of investment experience do you have?</label>
+    <select name="experience" required>
+      <option value="">— Select —</option>
+      <option>No experience</option>
+      <option>Less than 1 year</option>
+      <option>1 to 3 years</option>
+      <option>3 to 5 years</option>
+      <option>More than 5 years</option>
+    </select>
+
+    <!-- Q6: Robo advisor -->
+    <label>6. Have you ever used a robo-advisor or AI-based investment tool?</label>
+    <select name="robo_prior" required>
+      <option value="">— Select —</option>
+      <option>Yes</option><option>No</option><option>Not sure</option>
+    </select>
+
+    <!-- Q7: Manipulation check — custom slider, no default -->
+    <label>7. The AI recommendation seemed to reflect knowledge of my personal
+      investment history and preferences.
+      <span style="font-weight:normal;color:var(--muted);">
+        (1 = Strongly disagree, 7 = Strongly agree)
+      </span>
+    </label>
+    <input type="hidden" id="mcHidden" name="manipulation_check" value="">
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-bottom:6px;padding:0 2px;">
+      <span>1</span><span>2</span><span>3</span><span>4</span>
+      <span>5</span><span>6</span><span>7</span>
+    </div>
+    <div id="mcTrack"
+      style="position:relative;height:20px;background:#E2E8F0;border-radius:99px;
+             cursor:pointer;user-select:none;-webkit-user-select:none;margin-bottom:6px;">
+      <div id="mcFill" style="position:absolute;left:0;top:0;height:100%;width:0%;
+           background:#94A3B8;border-radius:99px;pointer-events:none;"></div>
+      <div id="mcKnob" style="position:absolute;top:50%;width:26px;height:26px;
+           background:white;border:3px solid #94A3B8;border-radius:50%;
+           transform:translate(-50%,-50%);display:none;pointer-events:none;
+           box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;
+                color:var(--muted);margin-bottom:8px;">
+      <span>Strongly disagree</span><span>Strongly agree</span>
+    </div>
+    <div id="mcPrompt" style="padding:16px;background:var(--gray);border-radius:10px;
+         text-align:center;color:var(--muted);font-size:14px;
+         border:2px dashed var(--border);margin-bottom:8px;">
+      ☝ Click or drag the bar above to rate your agreement
+    </div>
+    <div id="mcDisplay" style="display:none;padding:16px;background:var(--gray);
+         border-radius:10px;text-align:center;margin-bottom:8px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:4px;
+                  text-transform:uppercase;letter-spacing:1px;">Your Rating</div>
+      <div style="display:flex;align-items:baseline;justify-content:center;gap:4px;">
+        <span id="mcVal" style="font-size:52px;font-weight:bold;
+                                  line-height:1;color:#64748B;"></span>
+        <span style="font-size:20px;color:#64748B;">/ 7</span>
+      </div>
+      <div style="margin-top:10px;background:var(--border);border-radius:99px;
+                  height:10px;overflow:hidden;">
+        <div id="mcBar" style="height:100%;width:0%;background:#94A3B8;
+                                border-radius:99px;transition:width 0.2s;"></div>
+      </div>
+    </div>
+    <div id="mcWarn" style="color:var(--red);font-size:13px;
+                             margin-bottom:16px;display:none;">
+      ⚠ Please rate your agreement before continuing.
+    </div>
+
+    <!-- Q8: Open text -->
+    <label>8. Please describe in your own words how you made your investment
+      allocation decisions.</label>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">
+      We encourage you to include as many details as possible, if you would like.
+    </p>
+    <textarea name="open_text" rows="5" required
+      placeholder="Please describe your decision-making process..."></textarea>
+
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+
+<script>
+var ageTouched = false;
+var mcTouched  = false;
+
+// ── AGE SLIDER ────────────────────────────────────────────────────
+function calcAgePct(clientX){
+  var r = document.getElementById('ageTrack').getBoundingClientRect();
+  var p = (clientX - r.left) / r.width * 100;
+  return Math.max(0, Math.min(100, p));
+}
+
+function applyAge(pct){
+  var age = Math.round(18 + (pct / 100) * 62);
+  ageTouched = true;
+  document.getElementById('ageHidden').value = age;
+  document.getElementById('ageFill').style.width = pct + '%';
+  var k = document.getElementById('ageKnob');
+  k.style.display = 'block';
+  k.style.left = pct + '%';
+  document.getElementById('agePrompt').style.display = 'none';
+  document.getElementById('ageDisplay').style.display = 'block';
+  document.getElementById('ageVal').textContent = age;
+  document.getElementById('ageWarn').style.display = 'none';
+}
+
+document.getElementById('ageTrack').addEventListener('mousedown', function(e){
+  e.preventDefault();
+  applyAge(calcAgePct(e.clientX));
+  function onMove(e){ applyAge(calcAgePct(e.clientX)); }
+  function onUp(){
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+
+document.getElementById('ageTrack').addEventListener('touchstart', function(e){
+  e.preventDefault();
+  applyAge(calcAgePct(e.touches[0].clientX));
+  function onMove(e){ applyAge(calcAgePct(e.touches[0].clientX)); }
+  function onEnd(){
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onEnd);
+}, {passive:false});
+
+// ── MANIPULATION CHECK SLIDER ─────────────────────────────────────
+function calcMcPct(clientX){
+  var r = document.getElementById('mcTrack').getBoundingClientRect();
+  var p = (clientX - r.left) / r.width * 100;
+  return Math.max(0, Math.min(100, p));
+}
+
+function applyMc(pct){
+  var val = Math.round(1 + (pct / 100) * 6);
+  mcTouched = true;
+  document.getElementById('mcHidden').value = val;
+  document.getElementById('mcFill').style.width = pct + '%';
+  var k = document.getElementById('mcKnob');
+  k.style.display = 'block';
+  k.style.left = pct + '%';
+  document.getElementById('mcPrompt').style.display = 'none';
+  document.getElementById('mcDisplay').style.display = 'block';
+  document.getElementById('mcVal').textContent = val;
+  document.getElementById('mcBar').style.width = ((val-1)/6*100) + '%';
+  document.getElementById('mcWarn').style.display = 'none';
+}
+
+document.getElementById('mcTrack').addEventListener('mousedown', function(e){
+  e.preventDefault();
+  applyMc(calcMcPct(e.clientX));
+  function onMove(e){ applyMc(calcMcPct(e.clientX)); }
+  function onUp(){
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+
+document.getElementById('mcTrack').addEventListener('touchstart', function(e){
+  e.preventDefault();
+  applyMc(calcMcPct(e.touches[0].clientX));
+  function onMove(e){ applyMc(calcMcPct(e.touches[0].clientX)); }
+  function onEnd(){
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+  document.addEventListener('touchmove', onMove, {passive:false});
+  document.addEventListener('touchend', onEnd);
+}, {passive:false});
+
+// ── FORM VALIDATION ───────────────────────────────────────────────
+document.getElementById('postForm').addEventListener('submit', function(e){
+  var ok = true;
+  if(!ageTouched){
+    document.getElementById('ageWarn').style.display = 'block';
+    document.getElementById('ageTrack').scrollIntoView({behavior:'smooth'});
+    ok = false;
+  }
+  if(!mcTouched){
+    document.getElementById('mcWarn').style.display = 'block';
+    if(ok) document.getElementById('mcTrack').scrollIntoView({behavior:'smooth'});
+    ok = false;
+  }
+  if(!ok) e.preventDefault();
+});
+</script>
+{% endblock %}

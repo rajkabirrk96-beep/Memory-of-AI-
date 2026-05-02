@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Investment Profile</h2>
+  <p>Before you begin, we would like to ask several essential questions about
+    your investment profile and personal preferences. Please answer these to
+    the best of your knowledge about yourself.</p>
+  <hr class="divider">
+  <form method="POST" action="/survey">
+    <input type="hidden" name="action" value="prestudy">
+    <label>1. When you make an investment, how long do you typically plan to
+      hold it before selling it?</label>
+    <select name="hold_duration" required>
+      <option value="">— Select one —</option>
+      <option>Less than 1 month</option>
+      <option>1 to 3 months</option>
+      <option>3 to 6 months</option>
+      <option>6 to 12 months</option>
+      <option>More than 1 year</option>
+    </select>
+    <label>2. What is your primary investment goal over the medium term?</label>
+    <select name="investment_goal" required>
+      <option value="">— Select one —</option>
+      <option value="Capital preservation">Capital preservation — protect my money from losing value</option>
+      <option value="Steady growth">Steady growth — grow my money gradually with low risk</option>
+      <option value="High returns">High returns — maximize growth even if it means higher risk</option>
+      <option value="Income generation">Income generation — earn regular returns from my investments</option>
+    </select>
+    <label>3. If you were investing $1,000, how would you describe your risk tolerance?</label>
+    <select name="risk_tolerance" required>
+      <option value="">— Select one —</option>
+      <option value="Very conservative">Very conservative — protect my money even if returns are low</option>
+      <option value="Somewhat conservative">Somewhat conservative — mostly safe investments</option>
+      <option value="Moderate">Moderate — balance risk and return equally</option>
+      <option value="Somewhat aggressive">Somewhat aggressive — accept higher risk for higher returns</option>
+      <option value="Very aggressive">Very aggressive — seek maximum returns</option>
+    </select>
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+{% endblock %}

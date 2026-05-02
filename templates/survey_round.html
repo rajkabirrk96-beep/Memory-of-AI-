@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block content %}
+{% set pct = ((rnd - 1) / total_rounds * 100) | int %}
+<div class="progress-label">Round {{ rnd }} of {{ total_rounds }}</div>
+<div class="progress-bar"><div class="progress-fill" style="width:{{ pct }}%"></div></div>
+<div style="display:flex;gap:8px;margin-bottom:16px;align-items:center;">
+  {% for p in [1,2,3] %}
+  <div style="flex:1;height:5px;border-radius:99px;
+    background:{% if p<=phase %}var(--blue){% else %}var(--border){% endif %};"></div>
+  {% endfor %}
+  <span style="font-size:12px;color:var(--muted);white-space:nowrap;">Phase {{ phase }} of 3</span>
+</div>
+
+<div class="card">
+  <h2>Round {{ rnd }} of {{ total_rounds }} — {{ sector }}</h2>
+
+  <!-- AI RECOMMENDATION — above stock table -->
+  <div style="background:#E8EEFF;padding:20px;border-radius:10px;
+              border-left:4px solid var(--blue);margin-bottom:20px;">
+    <div style="font-weight:bold;color:var(--navy);margin-bottom:10px;
+                font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">
+      🤖 AI RECOMMENDATION
+      <span style="font-size:11px;font-weight:normal;color:var(--blue);
+                   margin-left:8px;background:white;padding:2px 8px;border-radius:99px;">
+        Phase {{ phase }} —
+        {% if phase==1 %}Profile Based
+        {% elif phase==2 %}Profile + History
+        {% else %}Full Accumulated Profile{% endif %}
+      </span>
+    </div>
+    <p style="color:var(--text);font-style:italic;margin-bottom:0;line-height:1.8;">
+      "{{ ai_text | safe }}"
+    </p>
+  </div>
+
+  <!-- Stock table — company name and price ONLY -->
+  <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+    <thead>
+      <tr style="background:var(--navy);color:white;">
+        <th style="padding:12px 16px;text-align:left;">Stock</th>
+        <th style="padding:12px 16px;text-align:right;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 16px;font-weight:bold;font-size:16px;">
+          <span style="display:inline-block;width:12px;height:12px;
+            background:#0F6E56;border-radius:50%;margin-right:8px;"></span>
+          {{ sa }}
+        </td>
+        <td style="padding:14px 16px;text-align:right;font-size:18px;
+                   font-weight:bold;color:var(--navy);">${{ "%.2f"|format(pa) }}</td>
+      </tr>
+      <tr style="background:var(--gray);">
+        <td style="padding:14px 16px;font-weight:bold;font-size:16px;">
+          <span style="display:inline-block;width:12px;height:12px;
+            background:#6B21A8;border-radius:50%;margin-right:8px;"></span>
+          {{ sb }}
+        </td>
+        <td style="padding:14px 16px;text-align:right;font-size:18px;
+                   font-weight:bold;color:var(--navy);">${{ "%.2f"|format(pb) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<form method="POST" action="/survey" id="allocForm">
+  <input type="hidden" name="action" value="round_{{ rnd }}">
+  <div class="card">
+    <h3>$1,000 Seed Money</h3>
+    <p>Enter the amount for each stock. They always add up to $1,000.</p>
+
+    <!-- Fractional shares notice -->
+    <div class="info-box" style="margin-bottom:16px;">
+      <p style="color:#1E40AF;font-size:14px;margin-bottom:0;line-height:1.6;">
+        <strong>Information!</strong> Please note that this study ensures the
+        holding of fractional shares, meaning that regardless of your specific
+        allocation amount for a stock, you will be considered a shareholder of
+        the company by owning that specific portion of the stock.
+      </p>
+    </div>
+
+    <!-- Allocation inputs -->
+    <div style="display:flex;gap:16px;align-items:flex-end;margin-bottom:20px;">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;
+                    text-transform:uppercase;letter-spacing:0.5px;font-weight:bold;">
+          <span style="display:inline-block;width:10px;height:10px;
+            background:#0F6E56;border-radius:50%;margin-right:6px;"></span>{{ sa }}
+        </div>
+        <div style="display:flex;align-items:center;border:2px solid var(--blue);
+                    border-radius:8px;overflow:hidden;background:var(--light);">
+          <span style="padding:0 12px;font-size:20px;font-weight:bold;
+                       color:var(--blue);">$</span>
+          <input type="number" id="inputA" name="alloc_a"
+            min="0" max="1000" placeholder="0 – 1000"
+            style="border:none;background:transparent;font-size:22px;
+                   font-weight:bold;color:#0F6E56;padding:14px 12px 14px 0;
+                   width:100%;outline:none;"
+            oninput="syncA(this.value)" onblur="clampA(this)">
+        </div>
+      </div>
+      <div style="font-size:28px;color:var(--muted);font-weight:bold;
+                  padding-bottom:14px;">+</div>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;
+                    text-transform:uppercase;letter-spacing:0.5px;font-weight:bold;">
+          <span style="display:inline-block;width:10px;height:10px;
+            background:#6B21A8;border-radius:50%;margin-right:6px;"></span>{{ sb }}
+        </div>
+        <div style="display:flex;align-items:center;border:2px solid #6B21A8;
+                    border-radius:8px;overflow:hidden;background:#FAF5FF;">
+          <span style="padding:0 12px;font-size:20px;font-weight:bold;
+                       color:var(--muted);">$</span>
+          <input type="number" id="inputB" min="0" max="1000"
+            placeholder="0 – 1000"
+            style="border:none;background:transparent;font-size:22px;
+                   font-weight:bold;color:#6B21A8;padding:14px 12px 14px 0;
+                   width:100%;outline:none;"
+            oninput="syncB(this.value)" onblur="clampB(this)">
+        </div>
+      </div>
+    </div>
+
+    <div id="totalBox" style="text-align:center;padding:12px;
+                               background:var(--gray);border-radius:8px;
+                               font-size:16px;color:var(--muted);">
+      Total: <strong id="totalAmt" style="color:var(--navy);font-size:20px;">$0</strong>
+      <span id="totalCheck" style="display:none;color:#0F6E56;"> ✓</span>
+    </div>
+
+    <div style="margin-top:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;
+                  color:var(--muted);margin-bottom:4px;">
+        <span>{{ sa }}</span><span>{{ sb }}</span>
+      </div>
+      <div style="height:12px;border-radius:99px;overflow:hidden;
+                  background:var(--border);display:flex;">
+        <div id="barA" style="width:0%;background:#0F6E56;transition:width 0.2s;
+                               border-radius:99px 0 0 99px;"></div>
+        <div id="barB" style="width:0%;background:#6B21A8;transition:width 0.2s;
+                               border-radius:0 99px 99px 0;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;
+                  font-size:12px;">
+        <span id="pctA" style="color:#0F6E56;font-weight:bold;">—</span>
+        <span id="pctB" style="color:#6B21A8;font-weight:bold;">—</span>
+      </div>
+    </div>
+    <div id="allocWarning" style="color:var(--red);font-size:13px;
+                                   margin-top:10px;display:none;">
+      ⚠ The two amounts must add up to exactly $1,000 before continuing.
+    </div>
+  </div>
+  <input type="hidden" id="alloc_a_final" name="alloc_a" value="">
+  <button type="submit" class="btn" onclick="return validateAlloc()">Next →</button>
+</form>
+
+<script>
+function syncA(v){var a=parseInt(v)||0;a=Math.max(0,Math.min(1000,a));
+  document.getElementById('inputB').value=1000-a;updateDisplay(a,1000-a);}
+function syncB(v){var b=parseInt(v)||0;b=Math.max(0,Math.min(1000,b));
+  document.getElementById('inputA').value=1000-b;updateDisplay(1000-b,b);}
+function clampA(el){var a=parseInt(el.value)||0;a=Math.max(0,Math.min(1000,a));
+  el.value=a;document.getElementById('inputB').value=1000-a;updateDisplay(a,1000-a);}
+function clampB(el){var b=parseInt(el.value)||0;b=Math.max(0,Math.min(1000,b));
+  el.value=b;document.getElementById('inputA').value=1000-b;updateDisplay(1000-b,b);}
+function updateDisplay(a,b){
+  var t=(parseInt(a)||0)+(parseInt(b)||0);
+  document.getElementById('totalAmt').textContent='$'+t;
+  var ck=document.getElementById('totalCheck'),bx=document.getElementById('totalBox');
+  if(t===1000){
+    ck.style.display='inline';bx.style.background='#E6F4F0';
+    document.getElementById('allocWarning').style.display='none';
+    var pA=(a/1000*100).toFixed(0),pB=(b/1000*100).toFixed(0);
+    document.getElementById('barA').style.width=pA+'%';
+    document.getElementById('barB').style.width=pB+'%';
+    document.getElementById('pctA').textContent=pA+'%';
+    document.getElementById('pctB').textContent=pB+'%';
+  }else{ck.style.display='none';bx.style.background='var(--gray)';}
+}
+function validateAlloc(){
+  var a=parseInt(document.getElementById('inputA').value)||0;
+  var b=parseInt(document.getElementById('inputB').value)||0;
+  if(a+b!==1000){
+    document.getElementById('allocWarning').style.display='block';
+    document.getElementById('totalBox').scrollIntoView({behavior:'smooth'});
+    return false;
+  }
+  document.getElementById('alloc_a_final').value=a;
+  document.getElementById('inputA').removeAttribute('name');
+  return true;
+}
+</script>
+{% endblock %}

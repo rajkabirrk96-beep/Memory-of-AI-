@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Decision Summary — Rounds {{ start_r }} to {{ end_r }}</h2>
+  <p>You have completed <strong>{{ end_r }} of 15</strong> rounds.</p>
+
+  <!-- Confidence only — no avg A/B/ACI boxes -->
+  <div style="background:white;border-radius:10px;padding:20px;
+              border:1px solid var(--border);margin-bottom:20px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;
+                letter-spacing:0.8px;margin-bottom:6px;">Average Confidence Level</div>
+    <div style="font-size:30px;font-weight:bold;color:var(--blue);
+                margin-bottom:10px;">{{ summary.avg_conf }}%</div>
+    <div style="background:var(--border);border-radius:99px;height:10px;overflow:hidden;">
+      <div style="height:100%;width:{{ summary.avg_conf }}%;
+                  background:#94A3B8;border-radius:99px;"></div>
+    </div>
+  </div>
+
+  <!-- Per-round table — stock names shown, no A/B labels, no ACI -->
+  <div style="overflow-x:auto;margin-bottom:24px;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:var(--navy);color:white;">
+          <th style="padding:10px 12px;text-align:left;">Round</th>
+          <th style="padding:10px 12px;text-align:right;">Allocation</th>
+          <th style="padding:10px 12px;text-align:right;">Allocation</th>
+          <th style="padding:10px 12px;text-align:right;">Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in summary.rounds %}
+        <tr style="border-bottom:1px solid var(--border);
+          {% if loop.index is even %}background:var(--gray);{% endif %}">
+          <td style="padding:10px 12px;font-weight:bold;color:var(--navy);">
+            Round {{ r.round }}
+          </td>
+          <td style="padding:10px 12px;text-align:right;color:#0F6E56;font-weight:bold;">
+            {{ r.sa_name }} (${{ r.alloc_a }})
+          </td>
+          <td style="padding:10px 12px;text-align:right;color:#6B21A8;font-weight:bold;">
+            {{ r.sb_name }} (${{ r.alloc_b }})
+          </td>
+          <td style="padding:10px 12px;text-align:right;">{{ r.conf }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- AI RECOMMENDATION update — different for A and B -->
+  <div style="background:#E8EEFF;padding:20px;border-radius:10px;
+              border-left:4px solid var(--blue);margin-bottom:24px;">
+    <div style="font-weight:bold;color:var(--navy);margin-bottom:10px;">
+      🤖 AI RECOMMENDATION
+    </div>
+    {% if condition == 'A' %}
+    <p style="color:var(--text);margin-bottom:0;line-height:1.8;font-style:italic;">
+      "After incorporating your recent investment styles recorded in
+      Rounds {{ start_r }} to {{ end_r }},
+      your <strong>{{ goal }}</strong> investment goal,
+      your <strong>{{ risk }}</strong> risk preference,
+      and your <strong>{{ hold }}</strong> hold duration preferences,
+      your investment profile and personal preferences have been updated
+      successfully for future AI Recommendations."
+    </p>
+    {% else %}
+    <p style="color:var(--text);margin-bottom:0;line-height:1.8;font-style:italic;">
+      "The AI recommendation engine continues to monitor current market
+      conditions and sector performance to provide suitable investment
+      options each round."
+    </p>
+    {% endif %}
+  </div>
+
+  <p style="color:var(--muted);font-size:14px;margin-bottom:16px;text-align:center;">
+    {% if phase==1 %}Phase 2 begins — 10 rounds remaining.
+    {% else %}Phase 3 begins — 5 rounds remaining.{% endif %}
+  </p>
+  <form method="POST" action="/survey">
+    <input type="hidden" name="action" value="feedback_{{ phase }}">
+    <button type="submit" class="btn">Next →</button>
+  </form>
+</div>
+{% endblock %}
