@@ -271,7 +271,8 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
         return (
             f"Based on your <strong>{goal}</strong> investment goal, "
             f"your <strong>{risk}</strong> risk preference, and your "
-            f"<strong>{hold}</strong> hold duration — both "
+            f"<strong>{hold}</strong> hold duration — "
+            f"and current market conditions and recent sector trends — both "
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
         )
