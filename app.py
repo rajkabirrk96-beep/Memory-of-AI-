@@ -670,6 +670,8 @@ def survey():
                 'robo_prior':    request.form.get('robo_prior'),
                 'manipulation_check': request.form.get('manipulation_check'),
                 'open_text':     request.form.get('open_text'),
+'full_name':     request.form.get('full_name'),
+'email':         request.form.get('email'),
             }
             save_response(row_data)
             mark_completed(pid)
