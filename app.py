@@ -279,7 +279,7 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
         allocs=[float(rd.get(f'R{r}_alloc',50)) for r in range(1,6)]
         confs=[float(rd.get(f'R{r}_conf',50)) for r in range(1,6)]
         avg_c=round(sum(confs)/len(confs),1) if confs else 50.0
-        return (
+     return (
             f"After incorporating your recent investment styles "
             f"with <strong>{avg_c}%</strong> average confidence, "
             f"your <strong>{goal}</strong> investment goal, "
@@ -289,7 +289,7 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
         )
-  else:
+    else:
         allocs=[float(rd.get(f'R{r}_alloc',50)) for r in range(1,11)]
         confs=[float(rd.get(f'R{r}_conf',50)) for r in range(1,11)]
         avg_c=round(sum(confs)/len(confs),1) if confs else 50.0
