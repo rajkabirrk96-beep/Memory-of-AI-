@@ -644,6 +644,45 @@ def survey():
             session['step'] = 'post_survey'
 
         elif action == 'post_survey':
+            try:
+                sec     = session.get('sector','Information Technology')
+                results = calc_final(sec, rd)
+                pid     = session.get('prolific_id','')
+                back_rounds = session.get('back_rounds',[])
+                row_data = {
+                    'participant_id':  session.get('participant_id'),
+                    'condition':       condition,
+                    'sector':          sec,
+                    'hold_duration':   session.get('hold_duration'),
+                    'investment_goal': session.get('investment_goal'),
+                    'risk_tolerance':  session.get('risk_tolerance'),
+                    'prolific_id':     pid,
+                    'started_at':      session.get('started_at'),
+                    'completed_at':    datetime.now().isoformat(),
+                    **{k:v for k,v in rd.items()},
+                    **results,
+                    'back_attempts': session.get('back_attempts',0),
+                    'back_rounds':   ','.join(str(r) for r in back_rounds),
+                    'age':           request.form.get('age'),
+                    'gender':        request.form.get('gender'),
+                    'income':        request.form.get('income'),
+                    'education':     request.form.get('education'),
+                    'experience':    request.form.get('experience'),
+                    'robo_prior':    request.form.get('robo_prior'),
+                    'manipulation_check': request.form.get('manipulation_check'),
+                    'open_text':     request.form.get('open_text'),
+                    'full_name':     request.form.get('full_name'),
+                    'email':         request.form.get('email'),
+                }
+                print(f"SAVING: participant={row_data['participant_id']} condition={row_data['condition']}")
+                save_response(row_data)
+                print(f"SAVED OK")
+                mark_completed(pid)
+            except Exception as e:
+                print(f"POST_SURVEY ERROR: {e}")
+                import traceback
+                traceback.print_exc()
+            session['step'] = 'thankyou'
             sec     = session.get('sector','Information Technology')
             results = calc_final(sec, rd)
             pid     = session.get('prolific_id','')
