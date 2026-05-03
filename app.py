@@ -644,6 +644,10 @@ def survey():
             session['step'] = 'post_survey'
 
         elif action == 'post_survey':
+            # Prevent double submission
+            if session.get('already_saved'):
+                session['step'] = 'thankyou'
+                return redirect('/survey', code=303)
             try:
                 sec     = session.get('sector','Information Technology')
                 results = calc_final(sec, rd)
@@ -678,6 +682,7 @@ def survey():
                 save_response(row_data)
                 print(f"SAVED OK")
                 mark_completed(pid)
+                session['already_saved'] = True
             except Exception as e:
                 print(f"POST_SURVEY ERROR: {e}")
                 import traceback
