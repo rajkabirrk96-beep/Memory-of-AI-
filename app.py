@@ -356,8 +356,9 @@ ALL_FIELDS = (
     ["total_return","benchmark_return","portfolio_score",
      "mean_confidence","mean_accuracy","oci","mean_aci","correct_rounds"] +
     ["back_attempts","back_rounds"] +
-    ["age","gender","income","education","experience",
-     "robo_prior","manipulation_check","open_text"]
+   ["age","gender","income","education","experience",
+      "robo_prior","manipulation_check","open_text",
+      "full_name","email"]
 )
 
 def init_db():
