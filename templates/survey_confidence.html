@@ -9,7 +9,18 @@
   <div style="background:#E8EEFF;padding:20px;border-radius:10px;
               border-left:4px solid var(--blue);margin-bottom:20px;">
     <div style="font-weight:bold;color:var(--navy);margin-bottom:10px;
-                font-size:13px;text-transform:uppercase;">🤖 AI RECOMMENDATION</div>
+                font-size:13px;text-transform:uppercase;">🤖 AI RECOMMENDATION
+      {% if condition == 'A' %}
+      <span style="font-size:11px;font-weight:normal;color:var(--blue);
+                   margin-left:8px;background:white;padding:2px 8px;
+                   border-radius:99px;">
+        Phase {{ phase }} —
+        {% if phase==1 %}Profile Based
+        {% elif phase==2 %}Profile + History
+        {% else %}Full Accumulated Profile{% endif %}
+      </span>
+      {% endif %}
+    </div>
     <p style="color:var(--text);font-style:italic;margin-bottom:0;line-height:1.8;">
       "{{ ai_text | safe }}"
     </p>
