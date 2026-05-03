@@ -275,8 +275,7 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
             f"and current market conditions and recent sector trends — both "
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
-        )
-   elif phase == 2:
+      elif phase == 2:
         allocs=[float(rd.get(f'R{r}_alloc',50)) for r in range(1,6)]
         confs=[float(rd.get(f'R{r}_conf',50)) for r in range(1,6)]
         avg_c=round(sum(confs)/len(confs),1) if confs else 50.0
