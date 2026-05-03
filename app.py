@@ -290,20 +290,17 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
         )
-    else:
+  else:
         allocs=[float(rd.get(f'R{r}_alloc',50)) for r in range(1,11)]
         confs=[float(rd.get(f'R{r}_conf',50)) for r in range(1,11)]
-        avg_s=sum(allocs)/len(allocs) if allocs else 50
-        avg_a=round(avg_s*10); avg_b=1000-avg_a
         avg_c=round(sum(confs)/len(confs),1) if confs else 50.0
         return (
-            f"After incorporating your recent investment styles, "
+            f"After incorporating your recent investment styles "
+            f"with <strong>{avg_c}%</strong> average confidence, "
             f"your <strong>{goal}</strong> investment goal, "
             f"your <strong>{risk}</strong> risk preference, and your "
             f"<strong>{hold}</strong> hold duration preferences — "
-            f"averaging <strong>${avg_a}</strong> in one stock and "
-            f"<strong>${avg_b}</strong> in the other with "
-            f"<strong>{avg_c}%</strong> average confidence — both "
+            f"and current market conditions and recent sector trends — both "
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
         )
