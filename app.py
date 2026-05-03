@@ -275,11 +275,12 @@ def build_ai_text_A(rnd, sa, sb, goal, risk, hold, rd):
             f"and current market conditions and recent sector trends — both "
             f"<strong>{sa}</strong> and <strong>{sb}</strong> "
             f"are suitable for your portfolio this round."
-      elif phase == 2:
+        )
+    elif phase == 2:
         allocs=[float(rd.get(f'R{r}_alloc',50)) for r in range(1,6)]
         confs=[float(rd.get(f'R{r}_conf',50)) for r in range(1,6)]
         avg_c=round(sum(confs)/len(confs),1) if confs else 50.0
-     return (
+        return (
             f"After incorporating your recent investment styles "
             f"with <strong>{avg_c}%</strong> average confidence, "
             f"your <strong>{goal}</strong> investment goal, "
@@ -350,9 +351,8 @@ ALL_FIELDS = (
     ["total_return","benchmark_return","portfolio_score",
      "mean_confidence","mean_accuracy","oci","mean_aci","correct_rounds"] +
     ["back_attempts","back_rounds"] +
-   ["age","gender","income","education","experience",
-      "robo_prior","manipulation_check","open_text",
-      "full_name","email"]
+    ["age","gender","income","education","experience",
+     "robo_prior","manipulation_check","open_text"]
 )
 
 def init_db():
@@ -669,8 +669,6 @@ def survey():
                 'robo_prior':    request.form.get('robo_prior'),
                 'manipulation_check': request.form.get('manipulation_check'),
                 'open_text':     request.form.get('open_text'),
-              'full_name':     request.form.get('full_name'),
-                'email':         request.form.get('email'),
             }
             save_response(row_data)
             mark_completed(pid)
