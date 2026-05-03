@@ -352,8 +352,7 @@ ALL_FIELDS = (
      "mean_confidence","mean_accuracy","oci","mean_aci","correct_rounds"] +
     ["back_attempts","back_rounds"] +
     ["age","gender","income","education","experience",
-     "robo_prior","manipulation_check","open_text",
-     "full_name","email"]
+     "robo_prior","manipulation_check","open_text"]
 )
 
 def init_db():
@@ -510,11 +509,14 @@ def generate_all_charts():
         ax.scatter([0],[0],color=color,s=30,zorder=6)
         ax.scatter([6],[growth_pct],color=color,s=30,zorder=6)
         ax.axhline(y=0,color='#94A3B8',linewidth=1.2,linestyle='--',alpha=0.8)
-        # Dynamic Y-axis bottom — full negative always visible
-        y_min=float(min(y))
+        # Dynamic Y-axis — full picture always visible both top and bottom
+        import math
+        y_min=float(min(y)); y_max=float(max(y))
         bottom=min(-2.0,y_min-0.5)
-        ax.set_ylim(bottom,10)
-        ticks=[round(bottom,1),0,2,4,6,8,10]
+        top=max(10.0,y_max+0.5)
+        ax.set_ylim(bottom,top)
+        tick_start=math.floor(bottom); tick_end=math.ceil(top)
+        ticks=sorted(set([t for t in range(tick_start,tick_end+1,2)]+[0]))
         ax.set_yticks(ticks)
         ax.set_yticklabels([f'{t}%' for t in ticks],fontsize=7,color='#94A3B8')
         ax.set_ylabel('Change (%)',fontsize=7.5,color='#64748B',labelpad=3)
@@ -560,7 +562,7 @@ def index():
     session['participant_id'] = str(uuid.uuid4())[:8]
     session['prolific_id']    = pid
     # Random assignment 50/50
-    session['condition'] = 'A' if random.random()<0.5 else 'B'
+    session['condition']      = 'A' if random.random()<0.5 else 'B'
     session['started_at']     = datetime.now().isoformat()
     session['rd']             = {}
     session['step']           = 'welcome'
@@ -648,46 +650,6 @@ def survey():
             if session.get('already_saved'):
                 session['step'] = 'thankyou'
                 return redirect('/survey', code=303)
-            try:
-                sec     = session.get('sector','Information Technology')
-                results = calc_final(sec, rd)
-                pid     = session.get('prolific_id','')
-                back_rounds = session.get('back_rounds',[])
-                row_data = {
-                    'participant_id':  session.get('participant_id'),
-                    'condition':       condition,
-                    'sector':          sec,
-                    'hold_duration':   session.get('hold_duration'),
-                    'investment_goal': session.get('investment_goal'),
-                    'risk_tolerance':  session.get('risk_tolerance'),
-                    'prolific_id':     pid,
-                    'started_at':      session.get('started_at'),
-                    'completed_at':    datetime.now().isoformat(),
-                    **{k:v for k,v in rd.items()},
-                    **results,
-                    'back_attempts': session.get('back_attempts',0),
-                    'back_rounds':   ','.join(str(r) for r in back_rounds),
-                    'age':           request.form.get('age'),
-                    'gender':        request.form.get('gender'),
-                    'income':        request.form.get('income'),
-                    'education':     request.form.get('education'),
-                    'experience':    request.form.get('experience'),
-                    'robo_prior':    request.form.get('robo_prior'),
-                    'manipulation_check': request.form.get('manipulation_check'),
-                    'open_text':     request.form.get('open_text'),
-                    'full_name':     request.form.get('full_name'),
-                    'email':         request.form.get('email'),
-                }
-                print(f"SAVING: participant={row_data['participant_id']} condition={row_data['condition']}")
-                save_response(row_data)
-                print(f"SAVED OK")
-                mark_completed(pid)
-                session['already_saved'] = True
-            except Exception as e:
-                print(f"POST_SURVEY ERROR: {e}")
-                import traceback
-                traceback.print_exc()
-            session['step'] = 'thankyou'
             sec     = session.get('sector','Information Technology')
             results = calc_final(sec, rd)
             pid     = session.get('prolific_id','')
@@ -714,11 +676,12 @@ def survey():
                 'robo_prior':    request.form.get('robo_prior'),
                 'manipulation_check': request.form.get('manipulation_check'),
                 'open_text':     request.form.get('open_text'),
-'full_name':     request.form.get('full_name'),
-'email':         request.form.get('email'),
+                'full_name':     request.form.get('full_name'),
+                'email':         request.form.get('email'),
             }
             save_response(row_data)
             mark_completed(pid)
+            session['already_saved'] = True
             session['step'] = 'thankyou'
 
         return redirect('/survey', code=303)
