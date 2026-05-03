@@ -160,6 +160,31 @@
     <textarea name="open_text" rows="5" required
       placeholder="Please describe your decision-making process..."></textarea>
 
+    <!-- Full Name — Required -->
+    <label>9. What is your full name?</label>
+    <input type="text" name="full_name" required
+      placeholder="Enter your full name"
+      style="width:100%;padding:12px 16px;border:2px solid var(--border);
+             border-radius:8px;font-size:15px;font-family:inherit;
+             color:var(--text);background:white;margin-bottom:20px;">
+
+    <!-- Email — Optional -->
+    <label>10. Would you like for us to include your name in the random
+      drawing of prize, if your final return reached the top 10%? Or,
+      would you like for us to send you summary results of this study?
+      If Yes in either case, feel free to provide your email address.
+    </label>
+    <p style="font-size:13px;color:var(--red);margin-bottom:8px;">
+      Note: not providing your email will automatically disqualify you
+      from being considered for the random drawing of prize, even if
+      your final return reached the top 10%.
+    </p>
+    <input type="email" name="email"
+      placeholder="your@email.com (optional)"
+      style="width:100%;padding:12px 16px;border:2px solid var(--border);
+             border-radius:8px;font-size:15px;font-family:inherit;
+             color:var(--text);background:white;margin-bottom:20px;">
+
     <button type="submit" class="btn">Next →</button>
   </form>
 </div>
