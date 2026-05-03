@@ -559,7 +559,7 @@ def index():
     session['participant_id'] = str(uuid.uuid4())[:8]
     session['prolific_id']    = pid
     # Random assignment 50/50
-    session['condition'] = 'B'
+    session['condition'] = 'A' if random.random()<0.5 else 'B'
     session['started_at']     = datetime.now().isoformat()
     session['rd']             = {}
     session['step']           = 'welcome'
